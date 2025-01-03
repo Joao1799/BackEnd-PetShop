@@ -1,0 +1,43 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  email    String   @unique
+  ownerName String
+  pets     Pet[]    @relation("UserPets") // para fzr a relação entre Usuario e Pet
+  atendimentos Atendimento[] @relation("UserAtendimentos")
+}
+
+model Pet {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  breed    String
+  age      Int
+  ownerId  String   @db.ObjectId
+  owner    User     @relation("UserPets", fields: [ownerId], references: [id]) // Referência ao Usuario
+  atendimentos Atendimento[] 
+}
+
+model Atendimento {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  tipo      String
+  dataHora  DateTime
+  atendido  Boolean  @default(false)
+  userId    String   @db.ObjectId
+  user      User     @relation("UserAtendimentos",fields: [userId], references: [id]) // Referência ao Usuario
+  petId     String   @db.ObjectId
+  pet       Pet      @relation(fields: [petId], references: [id]) // Referência ao Pet
+}
