@@ -25,6 +25,7 @@ model Pet {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   name     String
   breed    String
+  species  String
   age      Int
   ownerId  String   @db.ObjectId
   owner    User     @relation("UserPets", fields: [ownerId], references: [id]) // Referência ao Usuario
@@ -39,5 +40,5 @@ model Atendimento {
   userId    String   @db.ObjectId
   user      User     @relation("UserAtendimentos",fields: [userId], references: [id]) // Referência ao Usuario
   petId     String   @db.ObjectId
-  pet       Pet      @relation(fields: [petId], references: [id]) // Referência ao Pet
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade) // Referência ao Pet
 }

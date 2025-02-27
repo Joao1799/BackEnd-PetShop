@@ -3,17 +3,21 @@ const prisma = new PrismaClient();
 
 const createpet = async(request, response) =>{
 	try{
+		console.log("Corpo da requisição:", request.body);
+		console.log("UserID recebido na URL:", request.body.userId);
+
 		const data = {
-			name:request.body.name,
+			name:request.body.dogname,
 			breed:request.body.breed,
-			age:request.body.age,
-			owner:request.body.dogname,
-			ownerId: request.params.userId,
+			species: request.body.species,
+			age:String(request.body.age),
+			owner:request.body.owner,
+			ownerId: request.body.userId,
 			};
 			const newPet = await prisma.pet.create({data})
 			response.status(201).json(newPet)
 	}catch(error){
-			response.status(200).json({ error: 'Erro ao criar pet' });
+			response.status(500).json({ error: request.body });
 	}
 };
 
@@ -63,5 +67,5 @@ export default {
 	getAllpet,
 	updatepet,
 	deletepet,
-  }; 
+}; 
 
