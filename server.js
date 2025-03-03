@@ -1,7 +1,11 @@
+import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { PrismaClient } from '@prisma/client';
+import mongoose from 'mongoose';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const app = express();
 const prisma = new PrismaClient();
@@ -13,19 +17,12 @@ app.use(bodyParser.json());
 import userRouter from './src/routes/userRoute.js'; 
 import petRoutes from './src/routes/petRoute.js';
 import atendimentoRoutes from './src/routes/atendimentoRoute.js';
+import userFuncRoutes from './src/routes/userFuncRoute.js'
 
 app.use('/api', userRouter);
 app.use('/api', petRoutes);
 app.use('/api', atendimentoRoutes);
-
-app.get('/', (req, res) => {
-  res.send('API está funcionando!');
-});
-
-app.use((error, req, res, next) => {
-  console.error(error);
-  res.status(500).json({ error: 'Ocorreu um erro interno' });
-});
+app.use('/api', userFuncRoutes);
 
 const startServer = async () => {
   try {

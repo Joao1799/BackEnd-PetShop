@@ -13,12 +13,24 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model UserClient {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   email    String   @unique
+  CPF      String   @unique
+  telefone String?
   ownerName String
   pets     Pet[]    @relation("UserPets") // para fzr a relação entre Usuario e Pet
-  atendimentos Atendimento[] @relation("UserAtendimentos")
+  atendimentos  Atendimento[]  @relation("UserAtendimentos") // Um funcionário tem vários atendimentos
+}
+
+model UserFunc {
+  id       String   @id @default(auto()) @map("_id") @db.ObjectId
+  email    String   @unique
+  CPF      String   @unique
+  senha    String 
+  name     String 
+  cargo    String
+    atendimentos Atendimento[] @relation("FuncionarioAtendimentos") // Relação entre UserFunc e Atendimento
 }
 
 model Pet {
@@ -28,17 +40,19 @@ model Pet {
   species  String
   age      Int
   ownerId  String   @db.ObjectId
-  owner    User     @relation("UserPets", fields: [ownerId], references: [id]) // Referência ao Usuario
-  atendimentos Atendimento[] 
+  owner    UserClient     @relation("UserPets", fields: [ownerId], references: [id]) // Referência ao Usuario
+  atendimentos Atendimento[] @relation("PetAtendimentos") // Relação entre Pet e Atendimento
 }
 
 model Atendimento {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  tipo      String
-  dataHora  DateTime
-  atendido  Boolean  @default(false)
-  userId    String   @db.ObjectId
-  user      User     @relation("UserAtendimentos",fields: [userId], references: [id]) // Referência ao Usuario
-  petId     String   @db.ObjectId
-  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade) // Referência ao Pet
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  tipo         String
+  dataHora     DateTime
+  atendido     Boolean   @default(false)
+  userId       String    @db.ObjectId
+  user         UserClient @relation("UserAtendimentos", fields: [userId], references: [id]) // Referência ao UserClient
+  petId        String    @db.ObjectId
+  pet          Pet       @relation("PetAtendimentos", fields: [petId], references: [id], onDelete: Cascade) // Referência ao Pet
+  funcionarioId String    @db.ObjectId
+  funcionario  UserFunc  @relation("FuncionarioAtendimentos", fields: [funcionarioId], references: [id]) // Referência ao UserFunc
 }
