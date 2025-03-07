@@ -6,8 +6,8 @@ const router = express.Router();
 router.post('/usersFunc', controllerUserFunc.createUserFunc) 
 router.post('/login/usersFunc', controllerUserFunc.loginUserFunc) 
 router.get('/user/:id',verifyToken, controllerUserFunc.getUserFuncInfos);
-// router.get('/usersFunc', controllerUserFunc.getAllUsersFunc)
-// router.put('/usersFunc/:id', controllerUserFunc.updateUserFunc)
-// router.delete('/usersFunc/:id', controllerUserFunc.deleteUserFunc)
+router.get('/usersFunc', controllerUserFunc.getAllUsersFunc)
+router.put('/usersFunc/:id', controllerUserFunc.updateUserFunc)
+router.delete('/usersFunc/:id', controllerUserFunc.deleteUserFunc)
 
 export default router;

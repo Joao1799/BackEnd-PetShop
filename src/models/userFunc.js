@@ -108,11 +108,9 @@ const getAllUsersFunc = async (request, response) => {
     try {
         const users = await prisma.user.findMany({
             include: {
-                pets: true,
-                atendimentos: true,
+                atendimentos: true, 
             },
         });
-
         response.status(200).json(users);
         console.log(users);
     } catch (error) {
@@ -122,14 +120,16 @@ const getAllUsersFunc = async (request, response) => {
 
 const updateUserFunc = async (request, response) => {
     try {
-        await prisma.user.update({
+        await prisma.userFunc.update({
             where: {
                 id: request.params.id
             },
             data: {
-                ownerName: request.body.ownerName,
+                name: request.body.ownerName,
                 email: request.body.email,
-                atendimento: request.body.atendimento
+                CPF: request.body.CPF,
+                cargo: request.body.cargo,
+                senha: request.body.senha
             }
         })
         response.status(201).json(request.body)
@@ -140,7 +140,7 @@ const updateUserFunc = async (request, response) => {
 
 const deleteUserFunc = async (request, response) => {
     try {
-        await prisma.user.delete({
+        await prisma.userFunc.delete({
             where: {
                 id: request.params.id
             }
@@ -155,7 +155,7 @@ export default {
     createUserFunc,
     loginUserFunc,
     getUserFuncInfos,
-    // getAllUsersFunc,
-    // updateUserFunc,
-    // deleteUserFunc,
+    getAllUsersFunc,
+    updateUserFunc,
+    deleteUserFunc,
 };
