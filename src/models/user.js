@@ -51,7 +51,7 @@ const updateUser = async (request, response) => {
 	try {
 		await prisma.UserClient.update({
 			where: {
-				id: request.params.id
+				id: request.body.id
 			},
 			data: {
 				ownerName: request.body.ownerName,
@@ -68,16 +68,31 @@ const updateUser = async (request, response) => {
 
 const deleteUser = async (request, response) => {
 	try {
-		await prisma.UserClient.delete({
+		const id = request.params.id;
+		if (!id) {
+			return response.status(400).json({ error: 'ID inválido' });
+		}
+
+		// Excluir pets do usuário primeiro
+		await prisma.pet.deleteMany({
 			where: {
-				id: request.params.id
+				ownerId: id
 			}
-		})
-		response.status(204).json(request.body)
-	} catch {
+		});
+
+		// Agora excluir o usuário
+		await prisma.userClient.delete({
+			where: {
+				id: id
+			}
+		});
+
+		response.status(204).send();
+	} catch (error) {
+		console.error('Erro ao excluir usuário:', error);
 		response.status(500).json({ error: 'Erro ao excluir usuário' });
 	}
-}
+};
 
 export default {
 	createUser,

@@ -103,16 +103,19 @@ const getUserFuncInfos = async (req, res) => {
     }
 };
 
-
 const getAllUsersFunc = async (request, response) => {
     try {
-        const users = await prisma.user.findMany({
+        const users = await prisma.userFunc.findMany({
             include: {
                 atendimentos: true, 
             },
         });
-        response.status(200).json(users);
-        console.log(users);
+        // tentando desestruturar senha diretamente da array users, mas users é um array de objetos
+        // const { senha, ...userWithoutPassword } = users;
+
+        //precisa mapear os usuários e remover o campo senha de cada objeto individualmente:
+        const usersWithoutPassword = users.map(({ senha, ...rest }) => rest);
+        response.status(200).json(usersWithoutPassword);
     } catch (error) {
         response.status(500).json({ error: 'Erro ao buscar usuários' });
     }
@@ -132,7 +135,7 @@ const updateUserFunc = async (request, response) => {
                 senha: request.body.senha
             }
         })
-        response.status(201).json(request.body)
+        response.status(201).json({msg: "Usuário editado com sucesso!", data})
     } catch (error) {
         response.status(500).json({ error: 'Erro ao editar usuário' });
     }
@@ -145,7 +148,7 @@ const deleteUserFunc = async (request, response) => {
                 id: request.params.id
             }
         })
-        response.status(204).json(request.body)
+        response.status(204).json({msg: "Usuário excluido com sucesso!"})
     } catch {
         response.status(500).json({ error: 'Erro ao excluir usuário' });
     }
