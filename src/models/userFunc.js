@@ -76,7 +76,9 @@ const loginUserFunc = async (request, response) => {
             secret,
             { expiresIn: '1h' }   // expirar o token após 1 hora
         );
-        return response.status(200).json({ msg: 'Usuário autenticado', token });
+
+        console.log(user);
+        return response.status(200).json({ msg: 'Usuário autenticado',user,token });
     } catch (error) {
         console.error(error);
         return response.status(500).json({ error: 'Erro ao gerar o token!' });

@@ -41,7 +41,6 @@ const getAllUsers = async (request, response) => {
 			},
 		});
 		response.status(200).json(users);
-		console.log(users);
 	} catch (error) {
 		response.status(500).json({ error: 'Erro ao buscar usuários' });
 	}
