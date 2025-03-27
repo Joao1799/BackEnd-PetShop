@@ -20,12 +20,12 @@ Este projeto é uma API desenvolvida com Node.js e Express, projetada para geren
 
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/seu-usuario/petshop-api.git
+   git clone https://github.com/Joao1799/BackEnd-PetShop.git
    ```
 
 2. Acesse a pasta do projeto:
    ```bash
-   cd petshop-api
+   cd BackEnd-PetShop
    ```
 
 3. Instale as dependências:
