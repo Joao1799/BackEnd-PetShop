@@ -3,7 +3,7 @@ const prisma = new PrismaClient();
 
 const createUser = async (request, response) => {
 	try {
-		const { email, CPF, telefone, ownerName } = request.body;
+		const { email, CPF, telefone, ownerName, idade, CEP, endereco, bairro, estado, complemento } = request.body;
 		const userExist = await prisma.UserClient.findFirst({
             where: {
                 OR: [
@@ -21,7 +21,13 @@ const createUser = async (request, response) => {
                 email,
                 CPF,
                 ownerName,
-                telefone
+                telefone,
+                idade,
+                CEP,
+                endereco,
+                bairro,
+                estado,
+                complemento
             }
         });
 
@@ -55,8 +61,13 @@ const updateUser = async (request, response) => {
 			data: {
 				ownerName: request.body.ownerName,
 				email: request.body.email,
-				atendimento: request.body.atendimento,
-				telefone: request.body.telefone
+				telefone: request.body.telefone,
+				idade: request.body.idade,
+				CEP: request.body.CEP,
+				endereco: request.body.endereco,
+				bairro: request.body.bairro,
+				estado: request.body.estado,
+				complemento: request.body.complemento
 			}
 		})
 		response.status(201).json(request.body)
@@ -80,7 +91,7 @@ const deleteUser = async (request, response) => {
 		});
 
 		// Agora excluir o usuário
-		await prisma.userClient.delete({
+		await prisma.UserClient.delete({
 			where: {
 				id: id
 			}

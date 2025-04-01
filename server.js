@@ -1,11 +1,7 @@
-import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import { PrismaClient } from '@prisma/client';
-import mongoose from 'mongoose';
-import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 const app = express();
 const prisma = new PrismaClient();

@@ -14,14 +14,21 @@ datasource db {
 }
 
 model UserClient {
-  id       String   @id @default(auto()) @map("_id") @db.ObjectId
-  email    String   @unique
-  CPF      String   @unique
-  telefone String?
-  ownerName String
-  pets     Pet[]    @relation("UserPets") // para fzr a relação entre Usuario e Pet
-  atendimentos  Atendimento[]  @relation("UserAtendimentos") // Um funcionário tem vários atendimentos
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  email        String   @unique
+  CPF          String   @unique
+  telefone     String?
+  ownerName    String
+  idade        Int?
+  CEP          String?
+  endereco     String?
+  bairro       String?
+  estado       String?
+  complemento  String?
+  pets         Pet[]    @relation("UserPets") // Relação entre Usuário e Pet
+  atendimentos Atendimento[] @relation("UserAtendimentos") // Um funcionário tem vários atendimentos
 }
+
 
 model UserFunc {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
@@ -36,9 +43,11 @@ model UserFunc {
 model Pet {
   id       String   @id @default(auto()) @map("_id") @db.ObjectId
   name     String
-  breed    String
-  species  String
-  age      String
+  breed    String?
+  species  String?
+  age      String?
+  sexo     String?
+  peso     String?
   ownerId  String   @db.ObjectId
   owner    UserClient     @relation("UserPets", fields: [ownerId], references: [id]) // Referência ao Usuario
   atendimentos Atendimento[] @relation("PetAtendimentos") // Relação entre Pet e Atendimento
