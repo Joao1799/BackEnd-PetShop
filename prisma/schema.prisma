@@ -36,8 +36,10 @@ model UserFunc {
   CPF      String   @unique
   senha    String 
   name     String 
-  cargo    String
-    atendimentos Atendimento[] @relation("FuncionarioAtendimentos") // Relação entre UserFunc e Atendimento
+  cargoId  String   @db.ObjectId
+  cargo    Cargo    @relation(fields: [cargoId], references: [id])
+
+  atendimentos Atendimento[] @relation("FuncionarioAtendimentos") // Relação entre UserFunc e Atendimento
 }
 
 model Pet {
@@ -64,4 +66,11 @@ model Atendimento {
   pet          Pet       @relation("PetAtendimentos", fields: [petId], references: [id], onDelete: Cascade) // Referência ao Pet
   funcionarioId String    @db.ObjectId
   funcionario  UserFunc  @relation("FuncionarioAtendimentos", fields: [funcionarioId], references: [id]) // Referência ao UserFunc
+}
+
+model Cargo {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId 
+  nome      String
+  ativo     Boolean
+  users     UserFunc[] // Um cargo pode ter muitos users
 }

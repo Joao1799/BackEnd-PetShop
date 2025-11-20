@@ -14,11 +14,13 @@ import userRouter from './src/routes/userRoute.js';
 import petRoutes from './src/routes/petRoute.js';
 import atendimentoRoutes from './src/routes/atendimentoRoute.js';
 import userFuncRoutes from './src/routes/userFuncRoute.js'
+import cargoRoute from './src/routes/utils/cargoRoute.js'
 
 app.use('/api', userRouter);
 app.use('/api', petRoutes);
 app.use('/api', atendimentoRoutes);
 app.use('/api', userFuncRoutes);
+app.use('/api', cargoRoute);
 
 const startServer = async () => {
   try {
