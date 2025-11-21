@@ -89,14 +89,14 @@ const getUserFuncInfos = async (req, res) => {
     try {
         const { id } = req.params;
         const user = await prisma.userFunc.findUnique({
-            where: {
-                id: id
-            }
+            where: {id: id},
+            include: {cargo: true}
         });
         if (!user) {
             return res.status(404).json({ error: 'Usuário não encontrado!' });
         }
         const { senha, ...userWithoutPassword } = user;
+        
 
         return res.status(200).json(userWithoutPassword);
     } catch (error) {
@@ -119,29 +119,52 @@ const getAllUsersFunc = async (request, response) => {
         const usersWithoutPassword = users.map(({ senha, ...rest }) => rest);
         response.status(200).json(usersWithoutPassword);
     } catch (error) {
+         console.error("Erro ao buscar usuários:", error);
         response.status(500).json({ error: 'Erro ao buscar usuários' });
     }
 };
 
 const updateUserFunc = async (request, response) => {
     try {
-        await prisma.userFunc.update({
+        const cargo = await prisma.cargo.findFirst({
+            where: { 
+                nome: request.body.cargo
+            }
+        });
+
+        if (!cargo) {
+            return response.status(400).json({ error: "Cargo não encontrado" });
+        }
+
+        const data = await prisma.userFunc.update({
             where: {
                 id: request.params.id
             },
+
             data: {
-                name: request.body.ownerName,
+                name: request.body.name,
                 email: request.body.email,
                 CPF: request.body.CPF,
-                cargo: request.body.cargo,
-                senha: request.body.senha
+                cargo: {
+                    connect: { id: cargo.id }
+                }
+            },
+            include: {
+                cargo: true
             }
-        })
-        response.status(201).json({msg: "Usuário editado com sucesso!", data})
+        });
+
+        return response.status(200).json({
+            msg: "Usuário editado com sucesso!",
+            data
+        });
+
     } catch (error) {
-        response.status(500).json({ error: 'Erro ao editar usuário' });
+        console.error("Erro:", error);
+        return response.status(500).json({ error: "Erro ao editar usuário" });
     }
-}
+};
+
 
 const deleteUserFunc = async (request, response) => {
     try {

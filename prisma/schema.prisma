@@ -36,8 +36,8 @@ model UserFunc {
   CPF      String   @unique
   senha    String 
   name     String 
-  cargoId  String   @db.ObjectId
-  cargo    Cargo    @relation(fields: [cargoId], references: [id])
+  cargoId  String?   @db.ObjectId
+  cargo    Cargo?    @relation(fields: [cargoId], references: [id])
 
   atendimentos Atendimento[] @relation("FuncionarioAtendimentos") // Relação entre UserFunc e Atendimento
 }

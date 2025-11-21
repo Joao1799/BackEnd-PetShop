@@ -5,6 +5,6 @@ const router = express.Router();
 router.post('/createCargo',controllerCargo.createCargo)
 router.get('/listCargo',controllerCargo.getAllCargos)
 router.put('/editCargo',controllerCargo.updateCargo)
-// router.delete('/deleteCargo',controllerCargo)
+router.delete('/deleteCargo',controllerCargo.deleteCargo)
 
 export default router;

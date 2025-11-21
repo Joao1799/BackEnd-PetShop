@@ -63,16 +63,16 @@ const updateCargo = async (request, response) => {
 };
 
 
-const deleteUserFunc = async (request, response) => {
+const deleteCargo = async (request, response) => {
     try {
-        await prisma.userFunc.delete({
+        await prisma.cargo.delete({
             where: {
                 id: request.params.id
             }
         })
-        response.status(204).json({msg: "Usuário excluido com sucesso!"})
+        response.status(204).json({msg: "Cargo excluido com sucesso!"})
     } catch {
-        response.status(500).json({ error: 'Erro ao excluir usuário' });
+        response.status(500).json({ error: 'Erro ao excluir cargo' });
     }
 }
 
@@ -80,5 +80,5 @@ export default {
     createCargo,
     getAllCargos,
     updateCargo,
-    deleteUserFunc,
+    deleteCargo
 };
