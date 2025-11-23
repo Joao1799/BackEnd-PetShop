@@ -24,13 +24,13 @@ const createUserFunc = async (request, response) => {
         const passwordHash = await bcrypt.hash(senha, salt); //senha criptografada (senha e paramentro do bcrypt)
 
         // Cria o usuário com a senha criptografada
-        const newUser = await prisma.UserFunc.create({
+        const newUser = await prisma.userFunc.create({
             data: {
                 email,
                 CPF,
                 senha: passwordHash,
                 name,
-                cargo
+                // cargo
             }
         });
 
