@@ -5,10 +5,9 @@ dotenv.config();
 export const verifyToken = (req, res, next) => {
     
     const token = req.header('Authorization')?.replace('Bearer ', ''); // Extrai o token
-    console.log(token);
 
     if (!token) {
-        return res.status(401).json({ error: 'Acesso negado. Nenhum token fornecido.' });
+        return res.status(403).json({ error: error , msg:'Acesso negado. Nenhum token fornecido.' });
     }
 
     try {
@@ -16,7 +15,6 @@ export const verifyToken = (req, res, next) => {
         req.user = decoded; // Adiciona o usuário ao `req`
         next();
     } catch (error) {
-        console.error("aqui",error)
-        return res.status(400).json({ error: 'Token inválido.' });
+        return res.status(401).json({ error: error , msg: 'Token inválido.'});
     }
 };

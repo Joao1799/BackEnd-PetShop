@@ -3,9 +3,6 @@ const prisma = new PrismaClient();
 
 const createpet = async (request, response) => {
 	try {
-		console.log("Corpo da requisição:", request.body);
-		console.log("UserID recebido na URL:", request.body.ownerId);
-
 		const {name, breed, species, age, ownerId} = request.body;
 		const newPet = await prisma.Pet.create({
 			data : {

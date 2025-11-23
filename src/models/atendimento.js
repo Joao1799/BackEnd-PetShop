@@ -37,7 +37,6 @@ const createAtendimento = async (request, response) => {
 			},
 		});
 
-		console.log("Atendimento criado:", newAtendimento);
 		response.status(201).json(newAtendimento);
 	} catch (error) {
 		console.error("Erro ao criar atendimento:", error);

@@ -48,17 +48,21 @@ const loginUserFunc = async (request, response) => {
     if (!email) {
         return response.status(422).json({ msg: 'Email é obrigatorio' })
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return response.status(422).json({ msg: 'Formato de email inválido' });
+    }
+
     if (!senha) {
         return response.status(422).json({ msg: 'Senha é obrigatorio' })
     }
 
-    const user = await prisma.UserFunc.findFirst({
-        where: {
-            OR: [
-                { email: email } // Verifica se já existe 
-            ]
-        }
+    const user = await prisma.userFunc.findFirst({
+        where: { email },
+        include: { cargo: true }
     });
+
     if (!user) {
         return response.status(404).json({ msg: 'Usuario nao encontrado' })
     }
@@ -77,7 +81,6 @@ const loginUserFunc = async (request, response) => {
             { expiresIn: '1h' }   // expirar o token após 1 hora
         );
 
-        console.log(user);
         return response.status(200).json({ msg: 'Usuário autenticado',user,token });
     } catch (error) {
         console.error(error);
@@ -131,7 +134,7 @@ const updateUserFunc = async (request, response) => {
                 nome: request.body.cargo
             }
         });
-
+        
         if (!cargo) {
             return response.status(400).json({ error: "Cargo não encontrado" });
         }
