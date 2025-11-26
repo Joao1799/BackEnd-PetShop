@@ -33,13 +33,14 @@ const createUser = async (request, response) => {
 
 		response.status(201).json(newUser)
 	} catch (error) {
+		console.log(error);		
 		response.status(500).json({ error: 'Erro ao criar usuários' });
 	}
 };
 
 const getAllUsers = async (request, response) => {
 	try {
-		const users = await prisma.UserClient.findMany({
+		const users = await prisma.userClient.findMany({
 			include: {
 				pets: true, 
 				atendimentos: true, 
@@ -47,6 +48,7 @@ const getAllUsers = async (request, response) => {
 		});
 		response.status(200).json(users);
 	} catch (error) {
+		console.log(error);
 		response.status(500).json({ error: 'Erro ao buscar usuários' });
 	}
 };

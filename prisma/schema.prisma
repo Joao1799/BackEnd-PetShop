@@ -19,7 +19,7 @@ model UserClient {
   CPF          String   @unique
   telefone     String?
   ownerName    String
-  idade        Int?
+  idade        String?
   CEP          String?
   endereco     String?
   bairro       String?
@@ -57,7 +57,8 @@ model Pet {
 
 model Atendimento {
   id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  tipo         String
+  motivo       String
+  observacoes  String
   dataHora     String
   atendido     Boolean   @default(false)
   userId       String    @db.ObjectId

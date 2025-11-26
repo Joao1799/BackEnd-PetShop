@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 const createAtendimento = async (request, response) => {
 	try {
 		// Pegando os valores do corpo da requisição
-		const { userId, petId, funcionarioId, tipo, dataHora } = request.body;
+		const { userId, petId, funcionarioId, motivo, dataHora, observacoes } = request.body;
 
 		// Validando se todos os campos obrigatórios foram enviados
 		if (!userId || !petId || !funcionarioId) {
@@ -12,9 +12,9 @@ const createAtendimento = async (request, response) => {
 		}
 
 		// Valida se os IDs existem no banco
-		const userExists = await prisma.UserClient.findUnique({ where: { id: userId } });
-		const petExists = await prisma.Pet.findUnique({ where: { id: petId } });
-		const funcionarioExists = await prisma.UserFunc.findUnique({ where: { id: funcionarioId } });
+		const userExists = await prisma.userClient.findUnique({ where: { id: userId } });
+		const petExists = await prisma.pet.findUnique({ where: { id: petId } });
+		const funcionarioExists = await prisma.userFunc.findUnique({ where: { id: funcionarioId } });
 
 		if (!userExists) {
 			return response.status(400).json({ error: `Usuário com ID ${userId} não encontrado.` });
@@ -26,10 +26,11 @@ const createAtendimento = async (request, response) => {
 			return response.status(400).json({ error: `Funcionário com ID ${funcionarioId} não encontrado.` });
 		}
 
-		const newAtendimento = await prisma.Atendimento.create({
+		const newAtendimento = await prisma.atendimento.create({
 			data: {
-				tipo,
-				dataHora: new Date(dataHora),
+				dataHora,
+				motivo,
+				observacoes,
 				atendido: false,
 				userId,
 				petId,
@@ -47,7 +48,7 @@ const createAtendimento = async (request, response) => {
 const getAllAtendimentos = async (request, response) => {
 	try {
 		//buscar os dados no banco de dados
-		const atendimentos = await prisma.Atendimento.findMany({
+		const atendimentos = await prisma.atendimento.findMany({
 			include: {
 				user: true,
 				pet: true,
@@ -87,7 +88,7 @@ const getAllAtendimentos = async (request, response) => {
 
 const updateAtendimento = async (request, response) => {
 	try {
-		const atendimento = await prisma.Atendimento.update({
+		const atendimento = await prisma.atendimento.update({
 			where: {
 				id: request.body.id,
 			},
@@ -105,7 +106,7 @@ const updateAtendimento = async (request, response) => {
 
 const deleteAtendimento = async (request, response) => {
 	try {
-		await prisma.Atendimento.delete({
+		await prisma.atendimento.delete({
 			where: {
 				id: request.body.id,
 			},
