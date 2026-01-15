@@ -84,6 +84,13 @@ const deleteUser = async (request, response) => {
 			return response.status(400).json({ error: 'ID inválido' });
 		}
 
+
+		await prisma.atendimento.deleteMany({
+			where: {
+				userId: id
+			}
+		});
+
 		// Excluir pets do usuário primeiro
 		await prisma.pet.deleteMany({
 			where: {
@@ -92,7 +99,7 @@ const deleteUser = async (request, response) => {
 		});
 
 		// Agora excluir o usuário
-		await prisma.UserClient.delete({
+		await prisma.userClient.delete({
 			where: {
 				id: id
 			}

@@ -60,6 +60,7 @@ const getAllAtendimentos = async (request, response) => {
 			...rest,
 			//fitro os campos dos Objetos Aninhados
 			user:{
+				name: rest.user.ownerName,
 				email: rest.user.email,
 				CPF: rest.user.CPF,
 				telefone: rest.user.telefone,
